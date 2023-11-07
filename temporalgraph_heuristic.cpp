@@ -4,12 +4,22 @@
 #include <vector>
 #include <queue>
 #include <set>
+#include <map>
 
 // using namespace std;
 
 using point_ii = std::pair<int, int>;
 
 using ask_pair = std::pair<point_ii, point_ii>;
+
+struct Drone{
+    int flight_time_begin;
+    int flight_time_end;
+    std::vector<point_ii> path;
+    std::pair<point_ii,point_ii> ask;   
+    int drone_id;
+    double heuristic;
+};
 
 const std::vector<point_ii> directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
@@ -32,15 +42,15 @@ void read_asks(int k, std::vector<ask_pair> &asks) {
 	}
 }
 
-std::set<point_ii> retrieve_path(std::vector<std::vector<point_ii>>& parent, point_ii drone_end){
+std::vector<point_ii> retrieve_path(std::vector<std::vector<point_ii>>& parent, point_ii drone_end){
 
-	std::set<point_ii> path;
+	std::vector<point_ii> path;
 
 
 	auto [i,j]= drone_end;
 
 	while(parent[i][j]!=point_ii(-1,-1)){
-		path.insert({i,j});
+		path.push_back({i,j});
 
 		printf("i:%d , j:%d ",i,j);
 		std::tie(i,j)= parent[i][j];
@@ -57,7 +67,7 @@ inline bool valid_position(int x,int y, int n, int m){
 	return (x>=0 && x<n) && (y>=0 && y<m);
 }
 
-std::set<point_ii> bfs_min_path(int n, int m, int drone_id, std::vector<ask_pair> &asks) {
+std::vector<point_ii> bfs_min_path(int n, int m, int drone_id, std::vector<ask_pair> &asks) {
 
 	std::vector<std::vector<bool>> visited(n, std::vector<bool>(m, false));
 
@@ -97,6 +107,10 @@ std::set<point_ii> bfs_min_path(int n, int m, int drone_id, std::vector<ask_pair
 	return {};
 }
 
+void solve(){
+
+}
+
 int main() {
 	int N, M, K;
 	std::cin >> N >> M >> K;
@@ -107,7 +121,7 @@ int main() {
 
 	heuristic_order_drones.reserve(K);
 
-	std::vector<std::set<point_ii>> min_path(K);
+	std::vector<std::vector<point_ii>> min_path(K);
 
 	for(int drone_id=0; drone_id<K; drone_id++){
 		heuristic_order_drones.push_back(heuristic(drone_id, asks[drone_id]));
