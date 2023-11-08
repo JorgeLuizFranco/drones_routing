@@ -55,7 +55,7 @@ std::vector<point_ii> retrieve_path(std::vector<std::vector<point_ii>>& parent, 
 		
 		int t_aux=t;
 		while(t_aux>= drone.flight_time_begin){
-			scheduled[std::make_pair(point_ii(i,j), t_aux)];
+			scheduled[std::make_pair(point_ii(i,j), t_aux)]=true;
 			t_aux--;
 		}
 
@@ -150,7 +150,7 @@ void solve(int n, int m, std::vector<Drone> &drones){
 	std::cout<< scheduled[std::make_pair(point_ii(0,0),0)]<<'\n';
 
 	for(size_t i=0; i<drones.size(); i++){
-		
+		drones[i].path=bfs_min_path(n, m, drones[i], scheduled);
 	}
 }
 
