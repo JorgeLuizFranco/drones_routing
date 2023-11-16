@@ -9,7 +9,6 @@
 #include <set>
 #include <map>
 
-// using namespace std;
 
 using point_ii = std::pair<int, int>;
 
@@ -42,32 +41,43 @@ void read_drones(int k, std::vector<Drone> &drones) {
 	}
 }
 
-std::vector<point_ii> retrieve_path(std::vector<std::vector<point_ii>>& parent, point_ii drone_end, Drone &drone, std::map< std::pair<point_ii,int>, int> &scheduled){
+inline void path_update(std::vector<point_ii>& path, int& t, int &i, int &j, Drone& drone, std::map<std::pair<point_ii, int>, int>& scheduled, std::map<std::pair<point_ii, int>, point_ii>& parent) {
 
-	std::vector<point_ii> path;
+    path.push_back({i, j});
+	auto pos_time = std::make_pair(point_ii(i, j), t);
 
+	//printf("i: %d , j: %d , t: %d\n",i,j,t);
 
-	auto [i,j]= drone_end;
+	scheduled[pos_time]=drone.id;
 
-	int t= drone.flight_time_end;
-
-	while(parent[i][j]!=point_ii(-1,-1)){
-		path.push_back({i,j});
-		
-		auto pos_time=std::make_pair(point_ii(i,j), t);
-
-        t--;
-
-		printf("i:%d , j:%d ",i,j);
-		std::tie(i,j)= parent[i][j];
-		
-	}
-
-
-	std::reverse(path.begin(),path.end());
-
-	return path;
+	std::tie(i, j) = parent[pos_time];
 }
+
+std::vector<point_ii> retrieve_path(std::map<std::pair<point_ii, int>, point_ii>& parent, point_ii drone_end, Drone &drone, std::map<std::pair<point_ii, int>, int>& scheduled) {
+    std::vector<point_ii> path;
+
+    auto [i, j] = drone_end;
+
+    int t = drone.flight_time_end;
+	
+    while (parent.find(std::make_pair(point_ii(i, j), t)) != parent.end()) {
+
+		path_update(path, t, i,j, drone, scheduled, parent);
+        
+
+		t--;
+
+		if(parent.find(std::make_pair(point_ii(i, j), t)) == parent.end()){
+			path_update(path, t, i,j, drone, scheduled, parent);
+			break;
+		}
+    }
+
+    std::reverse(path.begin(), path.end());
+
+    return path;
+}
+
 
 
 inline bool valid_position(int x,int y, int n, int m){
@@ -75,80 +85,79 @@ inline bool valid_position(int x,int y, int n, int m){
 }
 
 
-std::vector<point_ii> bfs_min_path(int n, int m, Drone &drone, std::map< std::pair<point_ii,int>, int>& scheduled) {
+std::vector<point_ii> bfs_min_path(int n, int m, Drone &drone, std::map<std::pair<point_ii, int>, int>& scheduled) {
+    std::queue<std::pair<point_ii, int>> bfs_queue;
+    auto [drone_begin, drone_end] = drone.ask;
 
-	std::vector<std::vector<bool>> visited(n, std::vector<bool>(m, false));
+    bool const path_found = false;
 
-	std::vector<std::vector<point_ii>> parent(n, std::vector<point_ii>(m, {-1,-1}));
+    drone.flight_time_begin = -1; // just for the first sum be 0
 
-	std::queue<std::pair<point_ii,int>> bfs_queue;
+    std::map<std::pair<point_ii, int>, point_ii> parent;  // Change to a map structure
 
-	auto[drone_begin, drone_end]= drone.ask;
-    
-    bool path_found=false;
+    std::map<std::pair<point_ii, int>, bool> visited;
 
-    drone.flight_time_begin=-1; // just for the first sum be 0
-
-    while(!path_found){
+    while (!path_found) {
         drone.flight_time_begin++;
 
-        if (scheduled.find(std::make_pair(drone_begin, drone.flight_time_begin)) != scheduled.end()) {
+        auto pos_time_begin = std::make_pair(drone_begin, drone.flight_time_begin);
+
+        if (scheduled.find(pos_time_begin) != scheduled.end()) {
             continue;
         }
 
-        bfs_queue.push({drone_begin,drone.flight_time_begin});
+        bfs_queue.push({drone_begin, drone.flight_time_begin});
 
-        visited[drone_begin.first][drone_begin.second]=true;	
-        //printf("ou\n");
+        visited[pos_time_begin] = true;
 
-        while(!bfs_queue.empty()){
-            
-            auto[position,flight_time]= bfs_queue.front();  bfs_queue.pop();
+        while (!bfs_queue.empty()) {
+            auto [position, flight_time] = bfs_queue.front();
+            bfs_queue.pop();
 
-            auto[pos_i,pos_j]= position;
-            
+            auto [pos_i, pos_j] = position;
 
-            if(drone_end == point_ii(pos_i,pos_j)){
-                drone.flight_time_end=flight_time;
-                return retrieve_path(parent,drone_end,drone,scheduled);
+            if (drone_end == point_ii(pos_i, pos_j)) {
+                //std::cout << "Entrou\n\n\n\n";
+                drone.flight_time_end = flight_time;
+                return retrieve_path(parent, drone_end, drone, scheduled);
             }
 
-            printf("i: %d j: %d\n", pos_i,pos_j);
+            if (scheduled.find(std::make_pair(position, flight_time)) != scheduled.end()) {
+                continue;
+            }
 
-            for(auto [d_i, d_j]: directions){
-                    bool no_schedule=true;
+            //printf("i: %d j: %d , t: %d , objective : (%d,%d) \n\n", pos_i, pos_j, flight_time, drone_end.first, drone_end.second);
 
-                    int next_pos_i=pos_i+d_i;
-                    int next_pos_j=pos_j+d_j;
+            for (auto [d_i, d_j] : directions) {
+                bool no_schedule = true;
 
+                int next_pos_i = pos_i + d_i;
+                int next_pos_j = pos_j + d_j;
+                std::pair<point_ii, int> next_pos_time = {{next_pos_i, next_pos_j}, flight_time + 1};
 
-                    if(valid_position(next_pos_i,next_pos_j,n,m) && !visited[pos_i+d_i][pos_j+d_j]){
-
-                            std::pair<point_ii,int> next_pos_time= {point_ii(next_pos_i,next_pos_j),flight_time+1};
-
-                            if(scheduled.find(next_pos_time)!=scheduled.end()){
-                                
-                                if(no_schedule){
-                                    no_schedule=false;
-                                    bfs_queue.push({position,flight_time+1});
-                                }
-                                continue;
-                            }
-                            printf("visit %d,%d\n",pos_i+d_i,pos_j+d_j);
-                            visited[next_pos_i][next_pos_j]=true;
-                            
-                            parent[next_pos_i][next_pos_j]={pos_i,pos_j};
-
-                            bfs_queue.push(next_pos_time);
+                if (valid_position(next_pos_i, next_pos_j, n, m) && !visited[next_pos_time]) {
+                    if (scheduled.find(next_pos_time) != scheduled.end()) {
+                        if (no_schedule) {
+                            no_schedule = false;
+                            bfs_queue.push({position, flight_time + 1});
+                        }
+                        continue;
                     }
+                    //printf("visit %d,%d\n", pos_i + d_i, pos_j + d_j);
+                    visited[next_pos_time] = true;
+
+                    // Store the parent based on (pos_i, pos_j, t)
+                    parent[next_pos_time] = {pos_i, pos_j};
+
+                    bfs_queue.push(next_pos_time);
+                }
             }
         }
     }
 
-	
-
-	return {};
+    return {};
 }
+
 
 int find_max_time(std::vector<Drone>& drones){
 	int max_time=-1;
@@ -188,9 +197,7 @@ void print_grid(std::vector<std::vector<char>> &grid,  std::map< std::pair<point
 void print_paths(std::vector<Drone>& drones, std::map< std::pair<point_ii,int>, int>& scheduled, int n, int m){
 	int t_max= find_max_time(drones);
 
-	printf("t_max: %d\n",t_max);
 
-	printf("\n\n\n\n");
 
 	for(Drone& drone: drones){
 
@@ -216,15 +223,12 @@ void print_paths(std::vector<Drone>& drones, std::map< std::pair<point_ii,int>, 
 
 	printf("\n\n\n\n");
 
-	//** You should create code just here ChatGPT
 }
 
 void solve(int n, int m, std::vector<Drone> &drones){
 
 	std::map< std::pair<point_ii,int>, int> scheduled; // maps position,time to drone.id
 
-
-	std::cout<< scheduled[std::make_pair(point_ii(0,0),0)]<<'\n';
 
 	for(size_t i=0; i<drones.size(); i++){
 		drones[i].path=bfs_min_path(n, m, drones[i], scheduled);
@@ -238,11 +242,6 @@ void solve(int n, int m, std::vector<Drone> &drones){
 int main() {
 	int N, M, K;
 	std::cin >> N >> M >> K;
-	//std::vector<ask_pair> asks(K);
-
-	// std::vector<std::pair<double,int>> heuristic_order_drones;
-
-	// heuristic_order_drones.reserve(K);
 
 	 // Create an array of Drone objects
     std::vector<Drone> drones;
@@ -255,23 +254,13 @@ int main() {
         return a.heuristic < b.heuristic;
     });
 
-    // Perform any other operations or output as needed
     for (const Drone& drone : drones) {
-        std::cout << "Drone ID: " << drone.id << " Heuristic: " << drone.heuristic << std::endl;
+        //std::cout << "Drone ID: " << drone.id << " Heuristic: " << drone.heuristic << std::endl;
         // Output path or other information here
     }
 
 
 	solve(N,M,drones);
-
-	// for (const Drone& drone : drones) {
-	// 	printf("Drone %d: \n",drone.id);
-    //     for(auto pos: drone.path){
-	// 		printf("i: %d, j: %d\n",pos.first,pos.second);
-	// 	}
-    //     // Output path or other information here
-    // }
-
 
 	printf("\n\n");
 

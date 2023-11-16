@@ -54,7 +54,7 @@ std::vector<point_ii> retrieve_path(std::vector<std::vector<point_ii>>& parent, 
 	while(parent[i][j]!=point_ii(-1,-1)){
 		path.push_back({i,j});
 		
-		int t_aux=t;
+		int t_aux=t-1;
 		
 		while(t_aux>= drone.flight_time_begin){
 			auto pos_time=std::make_pair(point_ii(i,j), t_aux);

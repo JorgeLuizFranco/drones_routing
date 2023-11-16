@@ -1,0 +1,28 @@
+Test Case 1: Execution Time = 0.058387926 seconds
+
+
+Test Case 2: Execution Time = 0.028656459 seconds
+
+
+Test Case 3: Execution Time = 0.038190683 seconds
+
+
+Test Case 4: Execution Time = 0.007567523 seconds
+
+
+Test Case 5: Execution Time = 0.003969396 seconds
+
+
+Test Case 6: Execution Time = 0.007979374 seconds
+
+
+Test Case 7: Execution Time = 0.005926525 seconds
+
+
+Test Case 8: Execution Time = 0.003157488 seconds
+
+
+Test Case 9: Execution Time = 0.007066385 seconds
+
+
+Test Case 10: Execution Time = 0.003609507 seconds
