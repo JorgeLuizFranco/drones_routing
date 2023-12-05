@@ -1,0 +1,12 @@
+param N := 11;
+param M := 11;
+param K := 2;
+param x_max := 11;
+param y_max := 11;
+param a := 1.0;
+param b := 1.0;
+param T := 44;
+param i_start := 1 11 2 1;
+param j_start := 1 2 2 2;
+param i_end := 1 4 2 11;
+param j_end := 1 4 2 3;

@@ -1,0 +1,52 @@
+{
+"Test1": {
+	"Avg Time": 19.80,
+	"Avg Distance": 20.80,
+	"Mean": 20.30
+},
+"Test2": {
+	"Avg Time": 15.40,
+	"Avg Distance": 10.80,
+	"Mean": 13.10
+},
+"Test3": {
+	"Avg Time": 11.80,
+	"Avg Distance": 11.10,
+	"Mean": 11.45
+},
+"Test4": {
+	"Avg Time": 10.00,
+	"Avg Distance": 11.00,
+	"Mean": 10.50
+},
+"Test5": {
+	"Avg Time": 4.00,
+	"Avg Distance": 5.00,
+	"Mean": 4.50
+},
+"Test6": {
+	"Avg Time": 4.60,
+	"Avg Distance": 5.60,
+	"Mean": 5.10
+},
+"Test7": {
+	"Avg Time": 5.50,
+	"Avg Distance": 6.50,
+	"Mean": 6.00
+},
+"Test8": {
+	"Avg Time": 4.00,
+	"Avg Distance": 5.00,
+	"Mean": 4.50
+},
+"Test9": {
+	"Avg Time": 4.60,
+	"Avg Distance": 5.60,
+	"Mean": 5.10
+},
+"Test10": {
+	"Avg Time": 3.00,
+	"Avg Distance": 4.00,
+	"Mean": 3.50
+}
+}

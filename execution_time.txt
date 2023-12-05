@@ -26,3 +26,33 @@ Test Case 9: Execution Time = 0.007066385 seconds
 
 
 Test Case 10: Execution Time = 0.003609507 seconds
+Test Case 1: Execution Time = 0.036759438 seconds
+
+
+Test Case 2: Execution Time = 0.016490109 seconds
+
+
+Test Case 3: Execution Time = 0.022666769 seconds
+
+
+Test Case 4: Execution Time = 0.005479302 seconds
+
+
+Test Case 5: Execution Time = 0.003123868 seconds
+
+
+Test Case 6: Execution Time = 0.006185134 seconds
+
+
+Test Case 7: Execution Time = 0.003769954 seconds
+
+
+Test Case 8: Execution Time = 0.003839003 seconds
+
+
+Test Case 9: Execution Time = 0.004597138 seconds
+
+
+Test Case 10: Execution Time = 0.004839051 seconds
+
+

@@ -211,17 +211,17 @@ void print_paths(std::vector<Drone>& drones, std::map< std::pair<point_ii,int>, 
 			auto[pos_i,pos_j]= pos;
 			grid[pos_i][pos_j]= static_cast<char>(drone.id + '0');
 
-			print_grid(grid,scheduled,flight_time);
+			//print_grid(grid,scheduled,flight_time);
 
 			grid[pos_i][pos_j]= '#';
 
-			printf("flight time: %d\n\n",flight_time);
+			//printf("flight time: %d\n\n",flight_time);
 			++flight_time;
 		}
-		printf("\n\n\n");
+		//printf("\n\n\n");
 	}
 
-	printf("\n\n\n\n");
+	//printf("\n\n\n\n");
 
 }
 
@@ -235,6 +235,31 @@ void solve(int n, int m, std::vector<Drone> &drones){
 	}
 
 	print_paths(drones, scheduled,n,m);
+}
+
+void print_cost_dist_time(std::vector<Drone> &drones){
+    int total_time = 0;
+    int total_distance = 0;
+
+    for(const Drone& drone : drones){
+        int drone_time = drone.flight_time_end - drone.flight_time_begin;
+        int drone_distance = drone.path.size();
+
+        total_time += drone_time;
+        total_distance += drone_distance;
+
+        printf("Drone %d:\n", drone.id);
+        printf("  Time: %d\n", drone_time);
+        printf("  Distance: %d\n", drone_distance);
+    }
+
+    double average_time = static_cast<double>(total_time) /(int)drones.size();
+    double average_distance = static_cast<double>(total_distance) / (int)drones.size();
+    double mean = (average_time + average_distance) / 2;
+
+    printf("Average Time: %.2lf\n", average_time);
+    printf("Average Distance: %.2lf\n", average_distance);
+    printf("Mean: %.2lf\n", mean);
 }
 
 
@@ -261,13 +286,12 @@ int main() {
 
 
 	solve(N,M,drones);
+    
 
-	printf("\n\n");
-
-	
-	
-
-
+    print_cost_dist_time(drones);
 
 	return 0;
 }
+
+
+
