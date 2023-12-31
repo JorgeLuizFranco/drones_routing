@@ -15,8 +15,10 @@ param j_end{1..K};
 
 set DroneSet := 1..K;
 
+set VoandSet :=1..2;
+
 # Decision variables
-var x{1..N, 1..M, DroneSet, 1..T} binary;
+var x{1..N, 1..M, DroneSet, 1..T, 0..1} binary;
 var t_end{k in DroneSet} integer;
 var d_end{k in DroneSet} integer;
 
@@ -36,6 +38,14 @@ subject to StartPosition {k in DroneSet}:
 subject to EndPosition{k in DroneSet}:
   sum {t in 1..T}  x[i_end[k], j_end[k], k, t] = 1;
 
+# no tempo t voando ou não voando, pode ter dois drones ocupando o mesmo espaço
+
+binary voando;
+
+subject to InitialTime {i in SET1}:
+    sum{j in SET2} Var[i,j] <= Param[i]
+;
+
 
 
 subject to EndTime{k in DroneSet}:
@@ -44,10 +54,18 @@ subject to EndTime{k in DroneSet}:
 subject to TimeEnd {i in 1..N, j in 1..M, k in DroneSet, t in 1..T}:
     if t > t_end[k]+1 then x[i,j,k,t] = 0;
 
+subject to TimeBegin {i in SET1}:
+    sum{j in SET2} Var[i,j] <= Param[i]
+;
 
+subject to DroneMovement:
+    if x[i,j,k,t]=1  then x[i+1, j, k, t+1] + x[i-1, j, k, t+1] + x[i, j+1, k, t+1] + x[i, j-1, k, t+1] <=1;
+# agora está voando
 
 subject to MovementConstraint{i in 2..N-1, j in 2..M-1, k in DroneSet, t in 1..T-1}:
     x[i, j, k, t+1] <= x[i+1, j, k, t] + x[i-1, j, k, t] + x[i, j+1, k, t] + x[i, j-1, k, t];
+
+
 
 subject to DeltaCalculation{ k in DroneSet}:
     d_end[k] = sum {i in 1..N, j in 1..M, t in 2..T} abs(x[i, j, k, t] - x[i, j, k, t-1]);

@@ -262,6 +262,26 @@ void print_cost_dist_time(std::vector<Drone> &drones){
     printf("Mean: %.2lf\n", mean);
 }
 
+void print_paths_array(std::vector<Drone> &drones){
+
+        for(auto& drone: drones){
+            std::string result = "[";
+
+            for (const auto& pos : drone.path) {
+                result += "(" + std::to_string(pos.first) + "," + std::to_string(pos.second) + "),";
+            }
+
+            // Remove the trailing comma if the path is not empty
+            if (!drone.path.empty()) {
+                result.pop_back();
+            }
+
+            result += "]";
+            std::cout<< result<<'\n';
+        }
+    
+}
+
 
 
 int main() {
@@ -288,8 +308,8 @@ int main() {
 	solve(N,M,drones);
     
 
-    print_cost_dist_time(drones);
-
+    //print_cost_dist_time(drones);
+    print_paths_array(drones);
 	return 0;
 }
 

@@ -1,0 +1,177 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{aircraftshapes}
+
+\definecolor{greenMW}{rgb}{0.0, 0.75, 0.0} % Define the greenMW color
+\definecolor{orange}{rgb}{1.0, 0.65, 0.0} % Define the orange color
+\definecolor{blue}{rgb}{0.0, 0.0, 1.0} % Define the blue color
+
+\title{Test TikZ}
+\author{anonymus}
+\date{December 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[scale=.8, every node/.style={minimum size=1cm}]
+
+     % Define quadcopter style
+        \tikzset{
+            quadcopter/.style={
+                quadcopter side,
+                fill=white,
+                draw=gray,
+                minimum width=1cm,
+                below=of second-scope, 
+            },
+        }
+        % Último Escopo (t=4)
+        \begin{scope}[yshift=-240, every node/.append style={yslant=0.5, xslant=-1}, yslant=0.5, xslant=-1]
+            \fill[white, fill] (0,0) rectangle (5,5);
+            % Extend the grid
+            \draw[step=4mm, black] (0,0) grid (5,5);
+            \draw[black, thick] (0,0) rectangle (5,5); % Borders
+            % Add your rectangle fills here
+            \fill[greenMW] (2.05,2.05) rectangle (2.35,2.35); % center pixel
+            % 8 -pixel setting
+            \node (centerBegint3) at (2.2,2.2) {B}; % place 'B' in the center
+            \fill[blue] (1.65,2.05) rectangle (1.95,2.35); % left
+            \fill[greenMW] (2.45,2.05) rectangle (2.75,2.35); % right
+            \fill[greenMW] (2.05,2.45) rectangle (2.35,2.75); % top
+            \fill[greenMW] (2.05,1.95) rectangle (2.35,1.65); % bottom
+            
+            \fill[greenMW] (1.65,2.45) rectangle (1.95,2.75); % top-left
+            \fill[greenMW] (2.45,2.45) rectangle (2.75,2.75); % top-right
+            \fill[greenMW] (2.75,1.95) rectangle (2.45,1.65); % bottom-right
+            \fill[greenMW] (1.65,1.95) rectangle (1.95,1.65); % bottom-left
+            % 2. ring
+            \fill[greenMW] (1.25,1.55) rectangle (1.55,1.25); % bottom-left
+            \fill[greenMW] (0.85,1.55) rectangle (1.15,1.25); % bottom-left
+            \fill[greenMW] (0.85,1.15) rectangle (1.15,0.85); % bottom-left
+
+            \fill[brown, xshift=22.6] (1.25,0.75) rectangle (1.55,0.45); % bottom-left
+
+            \node(pathdestinyt3) [black, font=\bfseries] at ([yshift=-45.3]centerBegint3) {E};
+        \end{scope}
+
+        % Terceiro Escopo (t=3)
+        \begin{scope}[yshift=-170, every node/.append style={yslant=0.5, xslant=-1}, yslant=0.5, xslant=-1]
+            \fill[white, fill opacity=0.9] (0,0) rectangle (5,5);
+            % Extend the grid
+            \draw[step=4mm, black] (0,0) grid (5,5);
+            \draw[black, thick] (0,0) rectangle (5,5); % Borders
+            % Add your rectangle fills here
+            \fill[greenMW] (2.05,2.05) rectangle (2.35,2.35); % center pixel
+            % 8 -pixel setting
+            \node (centerBegint3) at (2.2,2.2) {B}; % place 'B' in the center
+            \fill[blue] (1.65,2.05) rectangle (1.95,2.35); % left
+            %\fill[greenMW] (2.45,2.05) rectangle (2.75,2.35); % right
+            % Draw an X inside the rectangle with color
+            \draw[orange] (2.45,2.05) -- (2.75,2.35);
+            \draw[orange] (2.45,2.35) -- (2.75,2.05);
+            \fill[greenMW] (2.05,2.45) rectangle (2.35,2.75); % top
+            \fill[greenMW] (2.05,1.95) rectangle (2.35,1.65); % bottom
+            
+            \fill[greenMW] (1.65,2.45) rectangle (1.95,2.75); % top-left
+            \fill[greenMW] (2.45,2.45) rectangle (2.75,2.75); % top-right
+            \fill[greenMW] (2.75,1.95) rectangle (2.45,1.65); % bottom-right
+            \fill[greenMW] (1.65,1.95) rectangle (1.95,1.65); % bottom-left
+            % 2. ring
+            \fill[greenMW] (1.25,1.55) rectangle (1.55,1.25); % bottom-left
+            \fill[greenMW] (0.85,1.55) rectangle (1.15,1.25); % bottom-left
+            \fill[greenMW] (0.85,1.15) rectangle (1.15,0.85); % bottom-left
+
+            \fill[brown, xshift=11.3] (1.25,0.75) rectangle (1.55,0.45); % bottom-left
+
+            \draw[-latex, thick, orange] () to[out=0, in=10] node[very near start, above] {arrival} (centerBegint2);
+
+            \node(pathdestinyt3) [black, font=\bfseries] at ([yshift=-45.3]centerBegint3) {E};
+        \end{scope}
+
+        % Escopo do meio (t=2)
+        \begin{scope}[yshift=-83, every node/.append style={yslant=0.5, xslant=-1}, yslant=0.5, xslant=-1]
+
+            \node [quadcopter side,fill=white,draw=orange,minimum width=1cm,rotate=10] (quadcoptert2) at (1,7) {};
+
+            \fill[white, fill opacity=0.9] (0,0) rectangle (5,5);
+            
+            \draw[step=4mm, black] (0,0) grid (5,5);
+            \draw[black, thick] (0,0) rectangle (5,5); % Borders
+            % Add your rectangle fills here
+            \fill[orange] (2.05,2.05) rectangle (2.35,2.35); % center pixel
+            \node (centerBegint2) at (2.2,2.2) {B}; % place 'B' in the center
+            \fill[greenMW] (1.65,2.05) rectangle (1.95,2.35); % left
+            \fill[greenMW] (2.45,2.05) rectangle (2.75,2.35); % right
+            \fill[greenMW] (2.05,1.95) rectangle (2.35,1.65); % bottom
+            \fill[greenMW] (2.05,2.45) rectangle (2.35,2.75); % top
+            % 8 -pixel setting
+            \fill[blue] (1.65,2.45) rectangle (1.95,2.75); % top-left
+            \fill[greenMW] (2.45,2.45) rectangle (2.75,2.75); % top-right
+            \fill[greenMW] (2.75,1.95) rectangle (2.45,1.65); % bottom-right
+            \fill[greenMW] (1.65,1.95) rectangle (1.95,1.65); % bottom-left
+            % 2. ring
+            \fill[greenMW] (1.25,1.55) rectangle (1.55,1.25); % bottom-left
+            \fill[greenMW] (0.85,1.55) rectangle (1.15,1.25); % bottom-left
+            \fill[greenMW] (0.85,1.15) rectangle (1.15,0.85); % bottom-left
+            \fill[brown] (1.25,0.75) rectangle (1.55,0.45); % bottom-left
+            \node(pathdestinyt2) [black, font=\bfseries] at ([yshift=-45.3]centerBegint2) {E};
+        \end{scope}
+
+        % Primeiro Escopo (t=1)
+        \begin{scope}[yshift=0, every node/.append style={yslant=0.5, xslant=-1}, yslant=0.5, xslant=-1]
+
+           \node [quadcopter side,fill=white,draw=orange,minimum width=1cm,rotate=10] (quadcoptert1) at (1,10) {};
+    
+        
+            \fill[white, fill opacity=0.9] (0,0) rectangle (5,5);
+            \draw[step=4mm, black] (0,0) grid (5,5); % Grid definition
+            \draw[black, thick] (0,0) rectangle (5,5); % Borders
+            % Add your rectangle fills here
+            \fill[greenMW] (2.05,2.05) rectangle (2.35,2.35); % center pixel
+            \draw[red, thin] (2.05,2.05) rectangle (2.35,2.35); % border
+            \node (centerBegint1) at (2.2,2.2) {B}; % place 'B' in the center
+            \fill[blue] (2.05,2.45) rectangle (2.35,2.75); % top
+            % \fill[blue] (1.65,2.45) rectangle (1.95,2.75); % top-left
+            % \fill[blue] (2.45,2.45) rectangle (2.75,2.75); % top-right
+            % \fill[blue] (2.75,1.95) rectangle (2.45,1.65); % bottom-right
+            % \fill[blue] (1.65,1.95) rectangle (1.95,1.65); % bottom-left
+            % % 2. ring
+            % \fill[blue] (1.25,1.55) rectangle (1.55,1.25); % bottom-left
+            % \fill[blue] (0.85,1.55) rectangle (1.15,1.25); % bottom-left
+            % \fill[blue] (0.85,1.15) rectangle (1.15,0.85); % bottom-left
+            % \fill[blue] (1.25,0.75) rectangle (1.55,0.45); % bottom-left
+
+            \fill[brown, xshift= -11.3] (1.25,0.75) rectangle (1.55,0.45); % bottom-left
+            
+            % Insert 'E' three squares down the center
+            \node(pathdestinyt1) [black, font=\bfseries] at ([yshift=-45.3]centerBegint1) {E};
+            
+        \end{scope}
+
+        % Draw annotations
+        \draw[-latex, thick, gray, dashed] (-5.4,-3.5) node[left] {occupied} to[out=0, in=200] (-0.5,-4.1);
+
+        \draw[-latex, thick, red] (quadcoptert1) to[out=35, in=90] node[midway, above] {failed takeoff} (centerBegint1);
+
+        \draw[-latex, thick, orange] (quadcoptert2) to[out=0, in=10] node[very near start, above] {arrival} (centerBegint2);
+
+
+        % Annotations
+        \draw[thick, gray!60!black] (6,4) node {t=1};
+        \draw[thick, gray!60!black] (6,0) node {t=2};
+        \draw[thick, gray!60!black] (6,-3) node {t=3};
+        \draw[thick, gray!60!black] (6,-6) node {t=4};
+    \end{tikzpicture}
+    \caption{Your caption here}
+    \label{fig:your_label}
+\end{figure}
+
+\end{document}
